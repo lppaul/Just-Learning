@@ -3,9 +3,8 @@
 userList = ['paul', 'chuck', 'charles', 'kenny', 'griggs']
 
 human = input('What is your name human?\n')
-loop = True
 
-while loop:
+while True:
     print('Glad to have you here ' + human)
     print('\n\nWhat would you like to do today?')
     print('\n1. Go to main menu'

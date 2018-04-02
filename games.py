@@ -1,4 +1,5 @@
 import random
+import os
 import decimal
 
 class Baseball:
@@ -9,8 +10,19 @@ class Baseball:
     team1Runs = 0
     team2Runs = 0
     teamList = []
-    teamWins = [0, 0, 0, 0, 0, 0, 0, 0]
-    teamLosses = [0, 0, 0, 0, 0, 0, 0, 0]
+    teamWins = [0,0,0,0,0,0,0,0,]
+    teamLosses = [0,0,0,0,0,0,0,0,]
+    '''
+    teamread = open('teamList.txt', 'r')
+    teamList = teamread.readlines()
+    winsread = open('teamWins.txt', 'r')
+    teamWins = winsread.readlines()
+    lossesread = open('teamLosses.txt', 'r')
+    teamLosses = lossesread.readlines()
+    teamread.close()
+    winsread.close()
+    lossesread.close()
+    '''
 
     def atbat():
         outs = 0
@@ -19,7 +31,7 @@ class Baseball:
         while outs < 3:
             input('Press any key to swing')
             chance = random.randrange(1, 100)
-            if chance <= 3:
+            if chance <= 10:
                 print('You scored a run!!!')
                 runs += 1
             else:
@@ -32,10 +44,16 @@ class Baseball:
         Baseball.innings += 1
         Baseball.inningsCounter += .5
 
+
     def startgame():
         print('Welcome to the game, press any key to continue through the plays\n')
 
-        while Baseball.innings <= 17 or Baseball.team2Runs == Baseball.team1Runs:
+        Baseball.innings = 0
+        Baseball.inningsCounter = 1
+        Baseball.team1Runs = 0
+        Baseball.team2Runs = 0
+
+        while Baseball.innings <= 17 or Baseball.team2Runs == Baseball.team1Runs and Baseball.innings % 2 != 0:
             if Baseball.innings % 2 == 0:
                 print('It is the top of inning', int(Baseball.inningsCounter), 'and the', Baseball.team1Temp, 'are at bat')
             else:
@@ -44,8 +62,20 @@ class Baseball:
 
         if Baseball.team1Runs > Baseball.team2Runs:
             print(Baseball.team1Temp, 'Wins with a score of ', Baseball.team1Runs, 'to', Baseball.team2Runs, '!')
+            for x in range(0,len(Baseball.teamList)):
+                if str(Baseball.team1Temp) == Baseball.teamList[x]:
+                    Baseball.teamWins[x] +=1
+            for x in range(0, len(Baseball.teamList)):
+                if str(Baseball.team2Temp) == Baseball.teamList[x]:
+                    Baseball.teamLosses[x] +=1
         elif Baseball.team2Runs > Baseball.team1Runs:
-            print(Baseball.team1Temp, 'Wins with a score of ', Baseball.team2Runs, 'to', Baseball.team1Runs, '!')
+            print(Baseball.team2Temp, 'Wins with a score of ', Baseball.team2Runs, 'to', Baseball.team1Runs, '!')
+            for x in range(0, len(Baseball.teamList)):
+                if str(Baseball.team1Temp) == Baseball.teamList[x]:
+                    Baseball.teamLosses[x] +=1
+            for x in range(0, len(Baseball.teamList)):
+                if str(Baseball.team2Temp) == Baseball.teamList[x]:
+                    Baseball.teamWins[x] +=1
 
 
     def menu():
@@ -62,11 +92,11 @@ class Baseball:
             menuChoice = int(input())
 
             if menuChoice == 1:
-                print('***************STANDINGS**************')
-                for x in range(len(Baseball.teamList)):
-                    print('*', Baseball.teamList[x], ' W ', Baseball.teamList[x], ' L ', Baseball.teamList[x])
+                print(' **************STANDINGS*************')
+                for x in range(0,len(Baseball.teamList)):
+                    print(' *', Baseball.teamList[x].ljust(15), 'W ', Baseball.teamWins[x], ' L ', Baseball.teamLosses[x], '\t\t*')
                     continue
-                print('**************************************')
+                print(' ************************************')
             elif menuChoice == 2:
                 if len(Baseball.teamList) <= 7:
                     print('Enter name of new team')
@@ -79,7 +109,7 @@ class Baseball:
             elif menuChoice == 3:
                 print('Enter name of team to remove')
                 delName = input()
-                for team in Baseball.teamList:
+                for team in range(0,len(Baseball.teamList)):
                     if delName == Baseball.teamList[team]:
                         del Baseball.teamList[team]
                 continue
@@ -92,6 +122,25 @@ class Baseball:
 
             elif menuChoice == 5:
                 print('Thank you for playing!')
+                '''
+                os.remove('teamWins.txt')
+                filewins = open('teamWins.txt', 'w')
+                os.remove('teamLosses.txt')
+                filelosses = open('teamLosses.txt', 'w')
+                os.remove('teamList.txt')
+                listwrite = open('teamList.txt', 'w')
+
+
+                for item in Baseball.teamWins:
+                    filewins.write("%s\n" % item)
+                for item in Baseball.teamWins:
+                    filelosses.write("%s\n" % item)
+                for item in Baseball.teamList:
+                    listwrite.write("%s\n" % item)
+                listwrite.close()
+                filewins.close()
+                filelosses.close()
+                '''
                 break
 
     def game(team1, team2):

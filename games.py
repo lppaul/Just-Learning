@@ -53,7 +53,7 @@ class Baseball:
         Baseball.team1Runs = 0
         Baseball.team2Runs = 0
 
-        while Baseball.innings <= 17 or Baseball.team2Runs == Baseball.team1Runs and Baseball.innings % 2 != 0:
+        while Baseball.innings <= 17 or Baseball.team2Runs == Baseball.team1Runs or Baseball.innings % 2 != 0:
             if Baseball.innings % 2 == 0:
                 print('It is the top of inning', int(Baseball.inningsCounter), 'and the', Baseball.team1Temp, 'are at bat')
             else:
